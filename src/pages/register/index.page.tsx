@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { api } from "@/lib/axios";
 import { Button, Heading, MultiStep, Text, TextInput } from "@ignite-ui/react";
 import { ArrowRight } from "phosphor-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Container, Form, FormError, Header } from "./styles";
 
 const registerFormSchema = z.object({
@@ -36,7 +36,14 @@ export default function Register() {
   const router = useRouter();
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data);
+    try {
+      await api.post("/users", {
+        name: data.name,
+        username: data.username,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
